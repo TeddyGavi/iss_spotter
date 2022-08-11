@@ -44,12 +44,11 @@ const print = (array) => {
   }
 };
 
-fetch.nextISSTimesForMyLocation((error, passTimes) => {
+fetch.nextISSTimesForMyLocation((error, flyOver) => {
   if (error) {
     console.log(`It didn't work ${error}`);
     return;
   }
 
-  console.log(passTimes);
-  print(passTimes);
+  print(flyOver);
 });
