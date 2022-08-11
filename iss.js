@@ -115,12 +115,12 @@ const nextISSTimesForMyLocation = function(callback) {
         callback(Error(`It didn't work! ${error}`), null);
         return;
       }
-      fetchISSFlyOverTimes(coordinates, (error, passTimes) => {
+      fetchISSFlyOverTimes(coordinates, (error, flyOver) => {
         if (error) {
           callback(Error(`It didn't work! ${error}`), null);
           return;
         }
-        callback(null, passTimes);
+        callback(null, flyOver);
       });
     });
   
