@@ -35,11 +35,21 @@ const fetch = require("./iss");
 //   console.log(`It worked! ISS Fly Over Times`, flyOver);
 // });
 
+const print = (array) => {
+  for (const x of array) {
+    const date = new Date(0);
+    date.setUTCSeconds(x.risetime);
+    const seconds = x.duration;
+    console.log(`Next pass at ${date} for ${seconds} seconds!`);
+  }
+};
+
 fetch.nextISSTimesForMyLocation((error, passTimes) => {
-  if(error) {
-    console.log(`It didn't work ${error}`)
+  if (error) {
+    console.log(`It didn't work ${error}`);
     return;
   }
 
   console.log(passTimes);
-})
+  print(passTimes);
+});

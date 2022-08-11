@@ -67,20 +67,21 @@ const fetchCoordsByIP = (ip, callback) => {
  */
 const fetchISSFlyOverTimes = function(coords, callback) {
   // ...
-  request(`https://iss-pass.herokuapp.com/json/?lat=${coords.latitude}&lon=${coords.longitude}`, (error, response, body) => {
+  request(`https://iss-pass.herokuapp.com/json/?lat=${coords.latitude}&lon=${coords.longitude}`, (error, res, body) => {
     if (error) {
       callback(error, null);
       return;
     }
 
     //check statusCode and return error if not a success, via a callback
-    if (response.statusCode !== 200) {
-      const msg = `Your request yielded a ${response.statusCode} status code`;
+    if (res.statusCode !== 200) {
+      const msg = `Your request yielded a ${res.statusCode} status code`;
       callback(Error(msg), null);
       return;
     }
     const data = JSON.parse(body);
-    //if the received message doesn't display a success, log that as an error 
+    // const { response } = data
+    //if the received message doesn't display a success, log that as an error
     if (data.message !== 'success') {
       const msg = `The HTTP request was a success but the query of, ${body} failed`;
       callback(Error(msg), null);
@@ -88,7 +89,7 @@ const fetchISSFlyOverTimes = function(coords, callback) {
     }
 
     //if everything checks, then display the response array
-    callback(null, data.response);
+    callback(null,  data.response);
 
   });
 };
@@ -97,34 +98,34 @@ const fetchISSFlyOverTimes = function(coords, callback) {
 /**
  * Orchestrates multiple API requests in order to determine the next 5 upcoming ISS fly overs for the user's current location.
  * Input:
- *   - A callback with an error or results. 
+ *   - A callback with an error or results.
  * Returns (via Callback):
  *   - An error, if any (nullable)
  *   - The fly-over times as an array (null if error):
  *     [ { risetime: <number>, duration: <number> }, ... ]
- */ 
+ */
 const nextISSTimesForMyLocation = function(callback) {
   fetchMyIP((error, ip) => {
     if (error) {
-      callback(Error(`It didn't work! ${error}`), null)
+      callback(Error(`It didn't work! ${error}`), null);
       return;
-    } 
+    }
     fetchCoordsByIP(ip, (error, coordinates) => {
       if (error) {
-        callback(Error(`It didn't work! ${error}`), null)
+        callback(Error(`It didn't work! ${error}`), null);
         return;
       }
       fetchISSFlyOverTimes(coordinates, (error, passTimes) => {
         if (error) {
-          callback(Error(`It didn't work! ${error}`), null)
+          callback(Error(`It didn't work! ${error}`), null);
           return;
         }
         callback(null, passTimes);
-      })
-    }) 
+      });
+    });
   
-  })
-}
+  });
+};
 
 
 
