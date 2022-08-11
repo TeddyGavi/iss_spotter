@@ -10,7 +10,7 @@ const request = require("request");
 
 
 const fetchMyIP = (callback) => {
-  // use request to fetch IP address from JSON API
+  // use request to fetch IP address in JSON format from API
 
   request('https://api.ipify.org?format=json', (error, response, body) => {
   
@@ -27,8 +27,6 @@ const fetchMyIP = (callback) => {
     } else {
       const data = JSON.parse(body).ip;
       callback(null, data);
-      // console.log(typeof data)
-      // return data;
     }
   });
 };
@@ -80,8 +78,8 @@ const fetchISSFlyOverTimes = function(coords, callback) {
       return;
     }
     const data = JSON.parse(body);
-    // const { response } = data
     //if the received message doesn't display a success, log that as an error
+    //need to parse the body JSON here otherwise we cannot search the info for the message key
     if (data.message !== 'success') {
       const msg = `The HTTP request was a success but the query of, ${body} failed`;
       callback(Error(msg), null);
@@ -104,6 +102,8 @@ const fetchISSFlyOverTimes = function(coords, callback) {
  *   - The fly-over times as an array (null if error):
  *     [ { risetime: <number>, duration: <number> }, ... ]
  */
+
+
 const nextISSTimesForMyLocation = function(callback) {
   fetchMyIP((error, ip) => {
     if (error) {
